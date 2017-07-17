@@ -1,0 +1,36 @@
+{
+  "name": "tension-cli",
+  "version": "1.0.0",
+  "description": "A simple CLI for scaffolding projects.",
+  "preferGlobal": true,
+  "bin": {
+    "tension": "bin/tension"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gurunate/tension-cli.git"
+  },
+  "keywords": [
+    "cli",
+    "scaffold"
+  ],
+  "author": "Nate Johnson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gurunate/tension-cli/issues"
+  },
+  "homepage": "https://github.com/gurunate/tension-cli#readme",
+  "dependencies": {
+    "chalk": "^2.0.1",
+    "commander": "^2.11.0",
+    "eslint": "^4.2.0",
+    "inquirer": "^3.2.0"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  }
+}
