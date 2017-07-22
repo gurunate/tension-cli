@@ -3,6 +3,10 @@
 const program = require('commander');
 const chalk = require('chalk');
 const download = require('download-git-repo');
+const exists = require('fs').existsSync;
+const path = require('path');
+const ora = require('ora');
+const home = require('user-home');
 
 /**
  * Usage.
@@ -27,5 +31,3 @@ program.on('--help', function () {
     console.log('    $ tension init username/repo my-project');
     console.log();
 });
-
-console.log(chalk.red('tension is mounting...'));

@@ -4,6 +4,9 @@
 
 const request = require('request');
 const chalk = require('chalk');
+const ora = require('ora');
+
+const spinner = ora('looking up templates');
 
 /**
  * Padding.
@@ -17,7 +20,7 @@ process.on('exit', function () {
 /**
  * List repos.
  */
-
+spinner.start();
 request({
     url: 'https://api.github.com/users/gurunate/repos',
     headers: {
@@ -28,16 +31,19 @@ request({
         throw(err);
     }
 
-    const requestBody = JSON.parse(body);
+    spinner.stop();
 
-    if (Array.isArray(requestBody)) {
-        console.log('  Available templates:');
+    const data = JSON.parse(body);
+
+    if (Array.isArray(data)) {
+        console.log('Available templates:');
         console.log();
-        requestBody.filter(r => r.name.match(/tension-template-/)).forEach(repo => {
+
+        data.filter(r => r.name.match(/tension-template-/)).forEach(repo => {
             console.log(` ${chalk.yellow('★')} ${chalk.blue(repo.name.replace('tension-template-', ''))} - ${repo.description}`);
         });
+
     } else {
-        console.error(requestBody.message);
+        console.error(data.message);
     }
-})
-;
+});
