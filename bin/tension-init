@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-var program = require('commander');
-var chalk = require('chalk');
+const program = require('commander');
+const chalk = require('chalk');
+const download = require('download-git-repo');
 
 /**
  * Usage.
@@ -20,7 +21,7 @@ program.on('--help', function () {
     console.log('  Examples:');
     console.log();
     console.log(chalk.gray('    # create a new project with an official template'));
-    console.log('    $ tension init webpack my-project');
+    console.log('    $ tension init hapi my-project');
     console.log();
     console.log(chalk.gray('    # create a new project straight from a github template'));
     console.log('    $ tension init username/repo my-project');

@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const request = require('request');
+const chalk = require('chalk');
+
+/**
+ * Padding.
+ */
+
+console.log();
+process.on('exit', function () {
+    console.log();
+});
+
+/**
+ * List repos.
+ */
+
+request({
+    url: 'https://api.github.com/users/gurunate/repos',
+    headers: {
+        'User-Agent': 'tension-cli'
+    }
+}, (err, res, body) => {
+    if (err) {
+        throw(err);
+    }
+
+    const requestBody = JSON.parse(body);
+
+    if (Array.isArray(requestBody)) {
+        console.log('  Available templates:');
+        console.log();
+        requestBody.filter(r => r.name.match(/tension-template-/)).forEach(repo => {
+            console.log(` ${chalk.yellow('★')} ${chalk.blue(repo.name.replace('tension-template-', ''))} - ${repo.description}`);
+        });
+    } else {
+        console.error(requestBody.message);
+    }
+})
+;
