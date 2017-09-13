@@ -6,7 +6,7 @@ const inquirer = require('inquirer');
 
 templates.fetch().then(data => {
 
-    console.log(chalk.bold.underline('Initialize a project:'));
+    console.log(chalk.bold.underline('Project Generator'));
     console.log();
 
     inquirer
@@ -22,6 +22,6 @@ templates.fetch().then(data => {
             default: 'my-project'
         }])
         .then(responses => {
-           console.trace(responses);
+           console.log(`I will download and generate ${chalk.green(responses.name)} as a ${chalk.green(responses.template)} project`);
         });
 });
