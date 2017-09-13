@@ -1,0 +1,60 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const inquirer = require('inquirer');
+const chalk = require('chalk');
+const tensionConfig = require('../tension.json');
+
+console.log();
+process.on('exit', function () {
+    console.log();
+});
+
+console.log(chalk.bold.underline('Add a template repository:'));
+console.log();
+
+inquirer
+    .prompt([{
+        type: 'list',
+        name: 'host',
+        message: 'Version control system?',
+        choices: ['GitHub', 'Bitbucket'],
+        default: 'GitHub'
+    }, {
+        type: 'input',
+        name: 'username',
+        message: "Git user name?",
+        validate: input => {
+            return (input.length > 0);
+        }
+    }, {
+        type: 'input',
+        name: 'pattern',
+        message: "Repository pattern?",
+        default: 'tension-template-'
+    }, {
+        type: 'confirm',
+        name: 'test',
+        message: "Test repository?",
+        default: 'y'
+    }])
+    .then(responses => {
+
+        tensionConfig.repositories.push({
+            url: 'whee',
+            pattern: 'blah'
+        });
+
+        console.log('tensionConfig', tensionConfig);
+
+        fs.writeFile(path.join(__dirname, '../tension.json'), JSON.stringify(tensionConfig, null, 4), err => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("The file was saved!");
+            }
+        });
+    });

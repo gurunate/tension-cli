@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+'use strict';
+
+console.log();
+process.on('exit', function () {
+    console.log();
+});
+
+console.log('remove coming soon...');

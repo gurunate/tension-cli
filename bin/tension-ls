@@ -1,0 +1,96 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const request = require('request');
+const chalk = require('chalk');
+const ora = require('ora');
+const tensionConfig = require('../tension.json');
+
+const spinner = ora('looking up templates');
+
+/**
+ * Padding.
+ */
+
+console.log();
+process.on('exit', function () {
+    console.log();
+});
+
+/**
+ * List available templates
+ */
+let promises = [];
+
+spinner.start();
+
+tensionConfig.repositories.forEach(repo => {
+    promises.push(retrieveTemplates(repo.url, repo.pattern));
+});
+
+const bullet = String.fromCharCode(8226);
+
+Promise.all(promises).then(data => {
+    spinner.stop();
+
+    console.log('Available templates:');
+    console.log();
+
+    data.forEach(repo => {
+        repo.templates.forEach(template => {
+            console.log(` ${chalk.yellow(bullet)} ${chalk.blue(template.name.replace(new RegExp(repo.pattern), ''))} - ${template.description}`);
+        });
+    });
+}).catch(err => {
+    console.log(err);
+});
+
+
+/**
+ * Gather an active list of available templates.
+ *
+ * @param url
+ * @param pattern
+ * @returns {Promise}
+ */
+function retrieveTemplates(url, pattern) {
+    return new Promise((resolve, reject) => {
+        request({
+            url: url,
+            headers: {
+                'User-Agent': 'tension-cli'
+            }
+        }, (err, res, body) => {
+            if (err) {
+                reject(err);
+            } else {
+                const repos = JSON.parse(body);
+
+                let templates = [];
+
+                if (url.match(new RegExp('github.com'))) {
+                    templates = repos.filter(r => r.name.match(new RegExp(pattern))).map(r => {
+                        return {
+                            name: r.name,
+                            description: r.description
+                        };
+                    });
+                } else {
+                    templates = repos.values.filter(r => r.name.match(new RegExp(pattern))).map(r => {
+                        return {
+                            name: r.name,
+                            description: r.description
+                        };
+                    });
+                }
+
+                resolve({
+                    url,
+                    pattern,
+                    templates
+                });
+            }
+        });
+    });
+}

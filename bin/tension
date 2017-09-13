@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
+const pkg = require('../package');
+
 require('commander')
-    .version(require('../package').version)
-    .usage('<command> [options]')
-    .command('init', 'generate a new project from a template')
-    .command('list', 'list available official templates')
+    .version(pkg.version)
+    .command('init', 'generate a project from a template')
+    .command('ls', 'list available templates')
+    .command('add', 'add template repository')
+    .command('rm', 'remove template repository')
     .parse(process.argv);

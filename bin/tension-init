@@ -1,33 +1,27 @@
 #!/usr/bin/env node
 
-const program = require('commander');
+const templates = require('../lib/templates');
 const chalk = require('chalk');
-const download = require('download-git-repo');
-const exists = require('fs').existsSync;
-const path = require('path');
-const ora = require('ora');
-const home = require('user-home');
+const inquirer = require('inquirer');
 
-/**
- * Usage.
- */
+templates.fetch().then(data => {
 
-program
-    .usage('<template-name> [project-name]')
-    .option('-c, --clone', 'use git clone')
-    .option('--offline', 'use cached template');
-
-/**
- * Help.
- */
-
-program.on('--help', function () {
-    console.log('  Examples:');
+    console.log(chalk.bold.underline('Initialize a project:'));
     console.log();
-    console.log(chalk.gray('    # create a new project with an official template'));
-    console.log('    $ tension init hapi my-project');
-    console.log();
-    console.log(chalk.gray('    # create a new project straight from a github template'));
-    console.log('    $ tension init username/repo my-project');
-    console.log();
+
+    inquirer
+        .prompt([{
+            type: 'list',
+            name: 'template',
+            message: 'Select template:',
+            choices: data.map(t => t.name.replace(new RegExp(t.pattern), ''))
+        }, {
+            type: 'input',
+            name: 'name',
+            message: 'Project name:',
+            default: 'my-project'
+        }])
+        .then(responses => {
+           console.trace(responses);
+        });
 });

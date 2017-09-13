@@ -1,0 +1,12 @@
+{
+    "repositories": [
+        {
+            "url": "https://api.github.com/users/gurunate/repos",
+            "pattern": "^tension-template-"
+        },
+        {
+            "url": "https://api.bitbucket.org/2.0/repositories/gurunate",
+            "pattern": "^tension-template-"
+        }
+    ]
+}
